@@ -1,8 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "build": "./node_modules/typescript/bin/tsc -p ./src/ --outDir ./build && node ./node_modules/browserify/bin/cmd ./build/app.js -o ./build/bundle.js",
-    "start": "node ./serve.js"
+    "copy_node_modules": "cp ./node_modules/director/build/director.js ./node_modules/todomvc-common/base.css ./node_modules/todomvc-app-css/index.css ./build/",
+    "build": "./node_modules/typescript/bin/tsc -p ./src/ --outDir ./build && node ./node_modules/browserify/bin/cmd ./build/app.js -o ./build/bundle.js && npm run copy_node_modules",
+    "build:clean": "rm -rf ./build && npm run build",
+    "start": "node ./serve.js",
+    "start:clean": "npm run build:clean && npm run start"
   },
   "dependencies": {
     "@types/classnames": "^2.2.6",

@@ -27,10 +27,12 @@ interface ITodoFooterProps {
 }
 
 
+type NotificationCallback = () => void;
+
 interface ITodoModel {
   key : any;
   todos : Array<ITodo>;
-  onChanges : Array<any>;
+  onChanges : Array<NotificationCallback>;
   subscribe(onChange);
   inform();
   addTodo(title : string);

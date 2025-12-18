@@ -16,7 +16,7 @@ class TodoModel implements ITodoModel {
 
   public key : string;
   public todos : Array<ITodo>;
-  public onChanges : Array<any>;
+  public onChanges : Array<NotificationCallback>;
 
   constructor(key) {
     this.key = key;
@@ -24,7 +24,7 @@ class TodoModel implements ITodoModel {
     this.onChanges = [];
   }
 
-  public subscribe(onChange) {
+  public subscribe(onChange: NotificationCallback) {
     this.onChanges.push(onChange);
   }
 

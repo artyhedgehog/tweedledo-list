@@ -1,8 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "copy_node_modules": "cp ./node_modules/director/build/director.js ./node_modules/todomvc-common/base.css ./node_modules/todomvc-app-css/index.css ./build/",
-    "build": "./node_modules/typescript/bin/tsc -p ./src/ --outDir ./build && node ./node_modules/browserify/bin/cmd ./build/app.js -o ./build/bundle.js && npm run copy_node_modules",
+    "build:tsc": "./node_modules/typescript/bin/tsc -p ./src/ --outDir ./build",
+    "build:browserify": "node ./node_modules/browserify/bin/cmd ./build/app.js -o ./build/bundle.js",
+    "build:copy:html": "cp src/index.html ./build/",
+    "build:copy:assets": "cp -R src/assets ./build/",
+    "build:copy:node_modules": "cp ./node_modules/director/build/director.js ./node_modules/todomvc-common/base.css ./node_modules/todomvc-app-css/index.css ./build/",
+    "build:copy": "npm run build:copy:html && npm run build:copy:assets && npm run build:copy:node_modules",
+    "build": "npm run build:tsc && npm run build:browserify && npm run build:copy",
     "build:clean": "rm -rf ./build && npm run build",
     "start": "node ./serve.js",
     "start:clean": "npm run build:clean && npm run start &",

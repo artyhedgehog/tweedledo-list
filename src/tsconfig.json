@@ -13,7 +13,7 @@
         "noLib": false,
         "preserveConstEnums": true,
         "lib": ["dom", "dom.iterable", "es2015", "es2017"],
-        "outDir": "./build"
+        "outDir": "../build"
     },
     "filesGlob": [
         "**/*.ts",

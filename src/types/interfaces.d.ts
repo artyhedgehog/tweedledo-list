@@ -43,11 +43,7 @@ interface ITodoModel {
   clearCompleted();
 }
 
-interface IAppProps {
-  model : ITodoModel;
-}
-
 interface IAppState {
   editing? : string;
-  nowShowing? : string
+  nowShowing? : string;
 }

@@ -3,18 +3,27 @@ import * as ReactDOM from "react-dom";
 import { TodoFooter } from "./footer";
 import { TodoItem } from "./todoItem";
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS, ENTER_KEY } from "../models/constants";
+import { TodoModel } from "../models/todoModel";
+
 declare var Router;
 
-export class TodoApp extends React.Component<IAppProps, IAppState> {
+export class TodoApp extends React.Component<{}, IAppState> {
 
     public state : IAppState;
+
+    private model: ITodoModel;
   
-    constructor(props : IAppProps) {
+    constructor(props : {}) {
       super(props);
+
+      this.model = new TodoModel('react-todos');
+
       this.state = {
         nowShowing: ALL_TODOS,
         editing: null
       };
+
+      this.model.subscribe(this.forceUpdate.bind(this));
     }
   
     public componentDidMount() {
@@ -37,7 +46,7 @@ export class TodoApp extends React.Component<IAppProps, IAppState> {
       var val = (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value.trim();
   
       if (val) {
-        this.props.model.addTodo(val);
+        this.model.addTodo(val);
         (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value = '';
       }
     }
@@ -45,15 +54,15 @@ export class TodoApp extends React.Component<IAppProps, IAppState> {
     public toggleAll(event : React.FormEvent) {
       var target : any = event.target;
       var checked = target.checked;
-      this.props.model.toggleAll(checked);
+      this.model.toggleAll(checked);
     }
   
     public toggle(todoToToggle : ITodo) {
-      this.props.model.toggle(todoToToggle);
+      this.model.toggle(todoToToggle);
     }
   
     public destroy(todo : ITodo) {
-      this.props.model.destroy(todo);
+      this.model.destroy(todo);
     }
   
     public edit(todo : ITodo) {
@@ -61,7 +70,7 @@ export class TodoApp extends React.Component<IAppProps, IAppState> {
     }
   
     public save(todoToSave : ITodo, text : String) {
-      this.props.model.save(todoToSave, text);
+      this.model.save(todoToSave, text);
       this.setState({editing: null});
     }
   
@@ -70,13 +79,13 @@ export class TodoApp extends React.Component<IAppProps, IAppState> {
     }
   
     public clearCompleted() {
-      this.props.model.clearCompleted();
+      this.model.clearCompleted();
     }
   
     public render() {
       var footer;
       var main;
-      const todos = this.props.model.todos;
+      const todos = this.model.todos;
   
       var shownTodos = todos.filter((todo) => {
         switch (this.state.nowShowing) {

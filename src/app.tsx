@@ -8,17 +8,14 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { TodoModel } from "./models/todoModel";
 import { TodoApp } from "./components/TodoApp"
 
-var model = new TodoModel('react-todos');
 
 function render() {
   ReactDOM.render(
-    <TodoApp model={model}/>,
+    <TodoApp />,
     document.getElementsByClassName('todoapp')[0]
   );
 }
 
-model.subscribe(render);
 render();

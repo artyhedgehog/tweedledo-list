@@ -94,6 +94,7 @@ class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
           <label onDoubleClick={ e => this.handleEdit() }>
             {this.props.todo.title}
           </label>
+          <button className="edit-item" onClick={this.props.onEdit} />
           <button className="destroy" onClick={this.props.onDestroy} />
         </div>
         <input

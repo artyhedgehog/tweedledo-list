@@ -11,10 +11,10 @@
     "build:clean": "rm -rf ./build && npm run build",
     "start": "node ./serve.js",
     "start:reset": "killall node",
-    "restart": "npm run start:reset ; npm run build:clean && npm run start",
+    "restart": "npm run start:reset ; npm run build:clean && npm run start &",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test": "npm run restart & npm run cy:run"
+    "test": "npm run restart && npm run cy:run"
   },
   "dependencies": {
     "@types/classnames": "^2.2.6",

@@ -21,13 +21,13 @@
         "!node_modules/**"
     ],
     "files": [
-        "constants.ts",
-        "interfaces.d.ts",
-        "todoModel.ts",
-        "utils.ts",
+        "models/constants.ts",
+        "types/interfaces.d.ts",
+        "models/todoModel.ts",
+        "models/utils.ts",
         "app.tsx",
-        "footer.tsx",
-        "todoItem.tsx"
+        "components/footer.tsx",
+        "components/todoItem.tsx"
     ],
     "exclude": [],
     "baseUrl": "types",

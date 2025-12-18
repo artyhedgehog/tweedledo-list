@@ -4,12 +4,12 @@
 /*jshint newcap: false */
 /*global React */
 
-/// <reference path="./interfaces.d.ts"/>
+/// <reference path="../types/interfaces.d.ts"/>
 
 import * as classNames from "classnames";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { ENTER_KEY, ESCAPE_KEY } from "./constants";
+import { ENTER_KEY, ESCAPE_KEY } from "../models/constants";
 
 class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
 

@@ -29,7 +29,9 @@
         "footer.tsx",
         "todoItem.tsx"
     ],
-    "exclude": [],
+    "exclude": [
+        "cypress/**", "node_modules"
+    ],
     "baseUrl": "types",
     "typeRoots": ["types"]
 }

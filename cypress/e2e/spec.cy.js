@@ -170,46 +170,27 @@ Cypress._.times(N, () => {
   // when using same "title" for describe, N suites are added
   // when using "countedTitle" - only the  LAST suite is added to the runner
 
+  const selectors = {
+    newTodo: '.new-todo',
+    todoList: '.todo-list',
+    todoItems: '.todo-list li',
+    todoItemsVisible: '.todo-list li:visible',
+    count: 'span.todo-count',
+    main: '.main',
+    footer: '.footer',
+    toggleAll: '.toggle-all',
+    clearCompleted: '.clear-completed',
+    filters: '.filters',
+    filterItems: '.filters li a',
+    destroyButton: '.destroy',
+  }
+
   describe(title, function () {
     // setup these constants to match what TodoMVC does
     let TODO_ITEM_ONE = 'buy some cheese'
     let TODO_ITEM_TWO = 'feed the cat'
     let TODO_ITEM_THREE = 'book a doctors appointment'
 
-    // different selectors depending on the app - some use ids, some use classes
-    let useIds
-    let selectors
-
-    const idSelectors = {
-      newTodo: '#new-todo',
-      todoList: '#todo-list',
-      todoItems: '#todo-list li',
-      todoItemsVisible: '#todo-list li:visible',
-      count: 'span#todo-count',
-      main: '#main',
-      footer: '#footer',
-      toggleAll: '#toggle-all',
-      clearCompleted: '#clear-completed',
-      filters: '#filters',
-      filterItems: '#filters li a'
-    }
-    const classSelectors = {
-      newTodo: '.new-todo',
-      todoList: '.todo-list',
-      todoItems: '.todo-list li',
-      todoItemsVisible: '.todo-list li:visible',
-      count: 'span.todo-count',
-      main: '.main',
-      footer: '.footer',
-      toggleAll: '.toggle-all',
-      clearCompleted: '.clear-completed',
-      filters: '.filters',
-      filterItems: '.filters li a'
-    }
-    const setSelectors = ids => {
-      useIds = ids
-      selectors = useIds ? idSelectors : classSelectors
-    }
 
     // reliably works in backbone app and other apps by using single selector
     const visibleTodos = () => cy.get(selectors.todoItemsVisible)
@@ -303,23 +284,7 @@ Cypress._.times(N, () => {
       // same tests - because our assertions often use `.should('have.class', ...)`
       cy.contains('h1', 'todos').should('be.visible')
       cy.document().then(doc => {
-        if (doc.querySelector('input#new-todo') && doc.querySelector('input.new-todo')) {
-          throw new Error(
-            'Cannot determine what kind of selectors this app uses. Add it to usesIDSelectors.'
-          )
-        } else if (doc.querySelector('input#new-todo')) {
-          cy.log('app uses ID selectors')
-          setSelectors(true)
-          createTodoCommands(true)
-        } else if (doc.querySelector('input.new-todo')) {
-          cy.log('app uses class selectors')
-          setSelectors(false)
-          createTodoCommands(false)
-        } else {
-          throw new Error(
-            'Cannot determine what kind of selectors this app uses.'
-          )
-        }
+        createTodoCommands(false)
       })
     })
 
@@ -337,15 +302,7 @@ Cypress._.times(N, () => {
 
     context('When page is initially opened', function () {
       it('should focus on the todo input field', function () {
-        // get the currently focused element and assert
-        // that it has class='new-todo'
-        //
-        // http://on.cypress.io/focused
-        if (useIds) {
-          cy.focused().should('have.id', 'new-todo')
-        } else {
-          cy.focused().should('have.class', 'new-todo')
-        }
+        cy.focused().should('have.class', 'new-todo')
       })
     })
 
@@ -821,6 +778,85 @@ Cypress._.times(N, () => {
           .contains(selectors.filterItems, 'Completed')
           .should('have.class', 'selected')
       })
+    })
+
+    context('TweedleDo List - Hover buttons', function () {
+      beforeEach(function () {
+        cy.createDefaultTodos().as('todos')
+        checkNumberOfTodosInLocalStorage(3)
+      })
+
+      // it('should remove the item on destroy button', function () {
+      //   cy.get('@todos').eq(1).trigger('mouseover').find(selectors.destroyButton).click()
+
+      //   checkNumberOfTodosInLocalStorage(2)
+      // })
+
+/*       it('should save edits on blur', function () {
+        cy.get('@todos').eq(1).find('label').dblclick()
+
+        cy
+          .get(selectors.todoItems)
+          .eq(1)
+          .find('.edit')
+          .clear()
+          .type('buy some sausages')
+          // we can just send the blur event directly
+          // to the input instead of having to click
+          // on another button on the page. though you
+          // could do that its just more mental work
+          .blur()
+
+        visibleTodos().eq(0).should('contain', TODO_ITEM_ONE)
+        visibleTodos().eq(1).should('contain', 'buy some sausages')
+        visibleTodos().eq(2).should('contain', TODO_ITEM_THREE)
+        checkTodosInLocalStorage('buy some sausages')
+      })
+
+      it('should trim entered text', function () {
+        cy.get('@todos').eq(1).find('label').dblclick()
+        checkTodosInLocalStorage(TODO_ITEM_TWO)
+
+        cy
+          .get(selectors.todoItems)
+          .eq(1)
+          .find('.edit')
+          .type('{selectall}{backspace}    buy some sausages    {enter}')
+
+        visibleTodos().eq(0).should('contain', TODO_ITEM_ONE)
+        visibleTodos().eq(1).should('contain', 'buy some sausages')
+        visibleTodos().eq(2).should('contain', TODO_ITEM_THREE)
+        checkTodosInLocalStorage('buy some sausages')
+      })
+
+      it('should remove the item if an empty text string was entered', function () {
+        cy.get('@todos').eq(1).find('label').dblclick()
+
+        cy
+          .get(selectors.todoItems)
+          .eq(1)
+          .find('.edit')
+          .clear().type('{enter}')
+
+
+        visibleTodos().should('have.length', 2)
+        checkNumberOfTodosInLocalStorage(2)
+      })
+
+      it('should cancel edits on escape', function () {
+        visibleTodos().eq(1).find('label').dblclick()
+
+        cy
+        .get(selectors.todoItems)
+        .eq(1)
+        .find('.edit')
+        .type('{selectall}{backspace}foo{esc}')
+
+        visibleTodos().eq(0).should('contain', TODO_ITEM_ONE)
+        visibleTodos().eq(1).should('contain', TODO_ITEM_TWO)
+        visibleTodos().eq(2).should('contain', TODO_ITEM_THREE)
+        checkNumberOfTodosInLocalStorage(3)
+      }) */
     })
   })
 })

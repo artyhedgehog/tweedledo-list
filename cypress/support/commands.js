@@ -1,7 +1,7 @@
-export function createTodoCommands (idSelectors) {
-  const newTodoSelector = idSelectors ? '#new-todo' : '.new-todo'
-  const todoListSelector = idSelectors ? '#todo-list' : '.todo-list'
-  const todoItemsSelector = idSelectors ? '#todo-list li' : '.todo-list li'
+export function createTodoCommands () {
+  const newTodoSelector = '.new-todo'
+  const todoListSelector = '.todo-list'
+  const todoItemsSelector = '.todo-list li'
 
   Cypress.Commands.add('createDefaultTodos', function () {
     let TODO_ITEM_ONE = 'buy some cheese'

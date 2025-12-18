@@ -5,13 +5,17 @@
     "build": "./node_modules/typescript/bin/tsc -p ./src/ --outDir ./build && node ./node_modules/browserify/bin/cmd ./build/app.js -o ./build/bundle.js && npm run copy_node_modules",
     "build:clean": "rm -rf ./build && npm run build",
     "start": "node ./serve.js",
-    "start:clean": "npm run build:clean && npm run start"
+    "start:clean": "npm run build:clean && npm run start",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:record": "npm run cy:run -- --record"
   },
   "dependencies": {
     "@types/classnames": "^2.2.6",
     "@types/react": "^16.7.0",
     "@types/react-dom": "^16.0.11",
     "classnames": "^2.2.6",
+    "cypress": "^3.4.1",
     "director": "^1.2.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
